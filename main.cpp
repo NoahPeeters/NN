@@ -4,27 +4,21 @@
 #include "nn/trainer/trainer.h"
 
 
-double abs(double n) {
-    return n < 0 ? -n : n;
-}
-
-
 double get_correct(double a0, double a1) {
-    return (double) ((int) a0 ^ (int) (a1));
+    return (double) ((int) a0 + (int) (a1));
 }
-
 
 double rate_function(Network *network) {
     double result = 0;
-    for (double a0 = 0; a0 < 2; a0++) {
-        for (double a1 = 0; a1 < 2; a1++) {
+    for (double a0 = 0; a0 < 3; a0++) {
+        for (double a1 = 0; a1 < 3; a1++) {
 
 
             std::vector<double> outputs = network->calculate({a0, a1});
 
             double correct_result = get_correct(a0, a1);
 
-            double diff = abs(correct_result - outputs[0]);
+            double diff = correct_result - outputs[0] * 10;
 
             result += diff * diff;
         }
@@ -34,14 +28,14 @@ double rate_function(Network *network) {
 
 
 void test(Network network) {
-    for (double a0 = 0; a0 < 2; a0++) {
-        for (double a1 = 0; a1 < 2; a1++) {
+    for (double a0 = 0; a0 < 5; a0++) {
+        for (double a1 = 0; a1 < 5; a1++) {
 
             std::vector<double> outputs = network.calculate({a0, a1});
 
             std::cout << a0 << "|" << a1 << std::endl;
             for (int i = 0; i < outputs.size(); ++i) {
-                std::cout << "  " << outputs[i] << " (" << round(outputs[i]) << ", " << get_correct(a0, a1) << ")"
+                std::cout << "  " << outputs[i] << " (" << round(outputs[i] * 10) << ", " << get_correct(a0, a1) << "," << a0 << "+" << a1<< ")"
                           << std::endl;
             }
         }
@@ -52,24 +46,24 @@ void test(Network network) {
 int main() {
     std::srand((unsigned int) std::time(0));
 
+    double a0 = 0.0;
     double a1 = 0.0;
-    double a2 = 0.0;
-    std::vector<double *> inputs = {&a1, &a2};
+    std::vector<double *> inputs = {&a0, &a1};
+
 
     Network network(2);
 
-    network.add_layer(3);
+//    network.add_layer(3);
     network.add_layer(1);
     network.print();
     test(network);
 
-    Trainer trainer(network, rate_function);
-    trainer.train(100000);
+    Trainer trainer(network, 15, rate_function);
+    trainer.train(100);
 
     network = trainer.get_best_network();
+    network.print();
     test(network);
 
-
-    std::cout << "Hello, World!" << std::endl;
     return 0;
 }
