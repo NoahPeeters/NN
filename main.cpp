@@ -4,17 +4,6 @@
 #include "nn/trainer/trainer.h"
 
 
-//std::vector<double*> generate_inputs(unsigned long n) {
-//    std::vector<double *> outputs (n);
-//
-//    for (int i = 0; i < n; ++i) {
-//        outputs.push_back(new double);
-//    }
-//
-//    return outputs;
-//}
-
-
 double abs(double n) {
     return n < 0 ? -n : n;
 }
