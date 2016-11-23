@@ -8,46 +8,34 @@
 #include "../helpers.h"
 
 
-Neuron::Neuron(std::vector<double*> inputs) {
+Neuron::Neuron(size_t input_size) {
     this->theta = rand_double() * 4.0 - 2.0;
 #ifdef SINUS
     this->omega = rand_double() * 4.0 - 2.0;
 #endif //SINUS
-    this->inputs = inputs;
-    this->weights.reserve(inputs.size());
+    this->weights.reserve(input_size);
 
 
-    for (int i = 0; i < inputs.size(); ++i) {
+    for (int i = 0; i < input_size; ++i) {
         this->weights.push_back(rand_double() * 4.0 - 2.0);
     }
 }
 
 void Neuron::modify() {
-    this->backup_theta = this->theta;
-    this->backup_weights = this->weights;
-
     this->theta += rand_double() * 0.5 - 0.25;
     for (int i = 0; i < weights.size(); ++i) {
         this->weights[i] += rand_double() * 0.5 - 0.25;
     }
 };
 
-void Neuron::revert() {
-    this->theta = this->backup_theta;
-    this->weights = this->backup_weights;
-
-}
-
-void Neuron::calculate() {
+void Neuron::calculate(std::vector<double> inputs) {
     double sum = 0.0;
 
     for (int i = 0; i < inputs.size(); ++i) {
-        sum += this->weights[i] * *this->inputs[i];
+        sum += this->weights[i] * inputs[i];
     }
 
 //    this->value = sum > theta ? 1.0 : 0.0;
-
-//    this->value = 1.0/(1+exp(-10.0 * (sum-theta)));
 #ifdef SINUS
     this->value = sin(this->omega*sum-theta);
 #else
@@ -62,14 +50,4 @@ void Neuron::print() {
     }
 
     std::cout << "|" << this->theta << std::endl << "        " ;
-
-    for (int i = 0; i < this->weights.size(); ++i) {
-        std::cout << this->inputs[i] << "|";
-    }
-
-    std::cout << "|" << &this->value << std::endl;
-}
-
-void Neuron::update_inputs(std::vector<double *> inputs) {
-    this->inputs = inputs;
 }

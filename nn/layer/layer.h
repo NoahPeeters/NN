@@ -11,14 +11,14 @@
 class Layer {
     std::vector<Neuron> neurons;
 public:
-    Layer(size_t layer_size, std::vector<double*> inputs);
-    std::vector<double*> get_outputs();
+    Layer(size_t layer_size, size_t input_size);
+    std::vector<double> get_outputs();
+    size_t get_output_size();
 
-    void update_inputs(std::vector<double*> inputs);
     void modify();
-    void revert();
-    void calculate();
+    void calculate(std::vector<double> inputs);
     void print();
+
 };
 
 

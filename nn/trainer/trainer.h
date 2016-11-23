@@ -9,15 +9,16 @@
 #include "../network/network.h"
 
 class Trainer {
-    Network* network;
+    Network network;
     double last_score;
 
-    double (*rate_function)(Network*, std::vector<double*>, std::vector<double*>);
+    double (*rate_function)(Network*);
     void single_train();
 public:
-    Trainer(Network* network, double (*new_rate_function)(Network*, std::vector<double*>, std::vector<double*>));
+    Trainer(Network network, double (*new_rate_function)(Network*));
     void train(int n);
-    Network* get_network();
+
+    Network get_best_network();
 };
 
 

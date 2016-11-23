@@ -10,18 +10,15 @@
 
 class Network {
     std::vector<Layer> layers;
-    std::vector<double*> inputs;
+    size_t input_size;
 public:
-    Network(std::vector<double*> inputs);
+    Network(size_t input_size);
 
-    std::vector<double*> get_inputs();
-    std::vector<double*> get_outputs();
+    std::vector<double> get_last_outputs();
 
-    void update_inputs();
     void add_layer(size_t layer_size);
     void modify();
-    void revert();
-    void calculate();
+    std::vector<double> calculate(std::vector<double> inputs);
     void print();
 };
 

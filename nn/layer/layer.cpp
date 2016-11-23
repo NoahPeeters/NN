@@ -5,30 +5,30 @@
 #include <iostream>
 #include "layer.h"
 
-Layer::Layer(size_t layer_size, std::vector<double*> inputs) {
+Layer::Layer(size_t layer_size, size_t input_size) {
     this->neurons.reserve(layer_size);
 
 
     for (int i = 0; i < layer_size; ++i) {
-        this->neurons.push_back(Neuron(inputs));
+        this->neurons.push_back(Neuron(input_size));
     }
 }
 
-std::vector<double *> Layer::get_outputs() {
-    std::vector<double *> outputs;
+std::vector<double> Layer::get_outputs() {
+    std::vector<double> outputs;
 
     outputs.reserve(this->neurons.size());
 
     for (int i = 0; i < this->neurons.size(); ++i) {
-        outputs.push_back(&this->neurons[i].value);
+        outputs.push_back(this->neurons[i].value);
     }
 
     return outputs;
 }
 
-void Layer::calculate() {
+void Layer::calculate(std::vector<double> inputs) {
     for (int i = 0; i < this->neurons.size(); ++i) {
-        neurons[i].calculate();
+        neurons[i].calculate(inputs);
     }
 }
 
@@ -45,14 +45,6 @@ void Layer::modify() {
     }
 }
 
-void Layer::revert() {
-    for (int i = 0; i < this->neurons.size(); ++i) {
-        neurons[i].revert();
-    }
-}
-
-void Layer::update_inputs(std::vector<double *> inputs) {
-    for (int i = 0; i < this->neurons.size(); ++i) {
-        neurons[i].update_inputs(inputs);
-    }
+size_t Layer::get_output_size() {
+    return this->neurons.size();
 }

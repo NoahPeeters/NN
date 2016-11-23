@@ -5,26 +5,29 @@
 #include <iostream>
 #include "network.h"
 
-Network::Network(std::vector<double *> inputs) {
-    this->inputs = inputs;
+Network::Network(size_t input_size) {
+    this->input_size = input_size;
 }
 
 void Network::add_layer(size_t layer_size) {
-    std::vector<double *> inputs = this->layers.size() == 0 ? this->inputs : this->layers.back().get_outputs();
+
+    size_t input_size = this->layers.size() == 0 ? this->input_size : this->layers.back().get_output_size();
 
     this->layers.reserve(this->layers.size() + 1);
 
-    this->layers.push_back(Layer(layer_size, inputs));
+    this->layers.push_back(Layer(layer_size, input_size));
 }
 
-std::vector<double *> Network::get_outputs() {
+std::vector<double> Network::get_last_outputs() {
     return this->layers.back().get_outputs();
 }
 
-void Network::calculate() {
+
+std::vector<double> Network::calculate(std::vector<double> inputs) {
     for (int i = 0; i < this->layers.size(); ++i) {
-        layers[i].calculate();
+        layers[i].calculate(inputs);
     }
+    return this->get_last_outputs();
 }
 
 void Network::print() {
@@ -37,21 +40,5 @@ void Network::print() {
 void Network::modify() {
     for (int i = 0; i < this->layers.size(); ++i) {
         layers[i].modify();
-    }
-}
-
-std::vector<double *> Network::get_inputs() {
-    return this->inputs;
-}
-
-void Network::revert() {
-    for (int i = 0; i < this->layers.size(); ++i) {
-        layers[i].revert();
-    }
-}
-
-void Network::update_inputs() {
-    for (int i = 1; i < this->layers.size(); ++i) {
-        this->layers[i].update_inputs(this->layers[i-1].get_outputs());
     }
 }

@@ -17,21 +17,14 @@ class Neuron {
 #ifdef SINUS
     double omega;
 #endif //SINUS
-
-    double backup_theta;
     std::vector<double> weights;
-    std::vector<double> backup_weights;
-    std::vector<double*> inputs;
 public:
-    Neuron(std::vector<double*> inputs);
+    Neuron(size_t input_size);
 
     double value;
 
-
-    void update_inputs(std::vector<double*> inputs);
     void modify();
-    void revert();
-    void calculate();
+    void calculate(std::vector<double> inputs);
     void print();
 };
 
