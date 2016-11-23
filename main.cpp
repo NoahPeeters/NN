@@ -21,11 +21,11 @@ double abs(double n) {
 
 
 double get_correct(double a0, double a1) {
-    return (double)((int)a0 ^ (int)(a1));
+    return (double) ((int) a0 ^ (int) (a1));
 }
 
 
-double rate_function (Network* network) {
+double rate_function(Network *network) {
     double result = 0;
     for (double a0 = 0; a0 < 2; a0++) {
         for (double a1 = 0; a1 < 2; a1++) {
@@ -40,7 +40,7 @@ double rate_function (Network* network) {
             result += diff * diff;
         }
     }
-    return 0-result;
+    return 0 - result;
 }
 
 
@@ -52,7 +52,8 @@ void test(Network network) {
 
             std::cout << a0 << "|" << a1 << std::endl;
             for (int i = 0; i < outputs.size(); ++i) {
-                std::cout << "  " << outputs[i] << " (" << round(outputs[i]) <<", " << get_correct(a0, a1) << ")" << std::endl;
+                std::cout << "  " << outputs[i] << " (" << round(outputs[i]) << ", " << get_correct(a0, a1) << ")"
+                          << std::endl;
             }
         }
     }
@@ -64,7 +65,7 @@ int main() {
 
     double a1 = 0.0;
     double a2 = 0.0;
-    std::vector<double*> inputs = {&a1, &a2};
+    std::vector<double *> inputs = {&a1, &a2};
 
     Network network(2);
 
@@ -73,10 +74,10 @@ int main() {
     network.print();
     test(network);
 
-    Trainer trainer (network, rate_function);
+    Trainer trainer(network, rate_function);
     trainer.train(100000);
 
-    network =trainer.get_best_network();
+    network = trainer.get_best_network();
     test(network);
 
 
